@@ -37,9 +37,8 @@ button {
 }
 
 .open-form-btn {
-  flex: auto;
-  width: 3rem;
-  height: 3rem;
+  flex: 0 0 3.5rem;
+  height: 3.5rem;
 }
 
 button:hover {

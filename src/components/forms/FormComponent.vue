@@ -8,7 +8,7 @@ const props = defineProps({
 defineEmits(["add-expense", "clear-all"]);
 </script>
 <template>
-  <div class="panel">
+  
     <h2>Nova despesa</h2>
     <p>
       <label>Título</label>
@@ -26,5 +26,7 @@ defineEmits(["add-expense", "clear-all"]);
       <button class="small-btn" @click="$emit('add-expense')">Add</button>
       <button class="small-btn" @click="$emit('clear-all')">Limpar tudo</button>
     </div>
-  </div>
+
 </template>
+<style scoped>
+</style>
