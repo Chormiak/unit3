@@ -64,12 +64,11 @@ function removeExpense(id) {
   expenses.value = expenses.value.filter((item) => item.id !== id);
 }
 
-/* limpar tudo */
+/* limpar apenas formulario */
 function clearAll() {
-  if (!confirm("Tem certeza?")) {
-    return;
-  }
-  expenses.value = [];
+  title.value = "";
+  value.value = "";
+  category.value = "";
 }
 </script>
 <template>
@@ -84,18 +83,23 @@ function clearAll() {
         :total="total"
         @remove-expense="removeExpense"
       />
-      <section :class="['form', { hidden: !isFormOpen }]">
-        <FormComponent
-          :title="title"
-          :value="value"
-          :category="category"
-          @add-expense="addExpense"
-          @clear-all="clearAll"
-        />
+      <section :class="['form', { hidden: !isFormOpen }]" @click.self="toggleForm">
+        <div class="modal">
+          <FormComponent
+            v-model:title="title"
+            v-model:value="value"
+            v-model:category="category"
+            @add-expense="addExpense"
+            @clear-all="clearAll"
+          />
+        </div>
       </section>
     </main>
     <footer>
-      <FooterComponent :filter="filter" />
+      <FooterComponent
+        v-model:filter="filter"
+        @open-form="toggleForm"
+      />
     </footer>
   </div>
 </template>
@@ -118,50 +122,14 @@ header {
   margin: 1rem 0;
   font-size: 1.25rem;
   border-radius: 0.5rem;
+  color: white;
   box-shadow: 0 0 0.5rem black;
+  background-color: rgb(22, 19, 127);
 }
-header::before {
-  position: absolute;
-  content: "";
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 0.5rem;
-  background-color: firebrick;
-}
+
 
 main {
   height: 100%;
-}
-
-.form {
-  position: fixed;
-  overflow: hidden;
-  top: 5.25rem;
-  left: 50%;
-  transform: translateX(-50%);
-  width: calc(40% - 1rem);
-  bottom: 1rem;
-  background-color: red;
-  border-radius: 0.5rem;
-  box-shadow: 0 0 0.5rem black;
-  padding: 1rem;
-  z-index: 100;
-  transition: margin 1.5s;
-}
-
-.form.hidden {
-  margin-top: 100vh;
-}
-
-.form::before {
-  position: absolute;
-  content: "";
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 0.5rem;
-  background-color: firebrick;
 }
 
 footer {
@@ -173,20 +141,33 @@ footer {
   margin: 1rem 0;
 }
 
+/* popup overlay */
+.form {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+}
+
+.form.hidden {
+  display: none;
+}
+
+.modal {
+  background: #eee;
+  border-radius: 12px;
+  padding: 1.5rem;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 0 0.7rem rgba(0, 0, 0, 0.4);
+}
+
 @media (max-width: 900px) {
   .app {
     grid-template-columns: 100%;
-  }
-
-  .form {
-    left: 1rem;
-    right: 1rem;
-    transform: translateX(0);
-    width: auto;
-  }
-
-  .form.hidden {
-    margin-top: 100vh;
   }
 }
 </style>
